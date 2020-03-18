@@ -1,0 +1,52 @@
+#!/usr/bin/env python3
+#
+# csvxfgimp
+#
+# Made by Rogier Visser (Laansloot IT)
+# 17 March 2020
+
+import csv, sys
+
+
+#
+# Step 1. Write the data
+#
+
+prefixunid = sys.argv[1]
+
+unidfilename = prefixunid + "-unids.txt"
+unids = []
+with open(unidfilename, "r") as file0:
+	for line in file0.readlines():
+		keys = line.strip().split(":")
+		unids.append(keys[1])
+unidtrans = unids[0]
+unidform = unids[1]
+title = unids[2]
+
+print("Found form \"" + title + "\"")
+print("---------------------------------------")
+
+translationfilename = prefixunid + "-translation.txt"
+with open(translationfilename, "r") as file1:
+	print("Importing " + translationfilename)
+	translation = file1.read().strip()
+
+xmlformfilename = prefixunid + "-form.xml"
+with open(xmlformfilename, "r") as file2:
+	print("Importing " + xmlformfilename)
+	form = file2.read().strip()
+	
+xmlcardfilename = prefixunid + "-card.xml"
+with open(xmlcardfilename, "r") as file3:
+	print("Importing " + xmlcardfilename)
+	card = file3.read().strip()
+
+exportcsv = "XFG-import.csv"
+with open(exportcsv, 'w', newline='') as file1:
+	file1.write("unidform;form;card;unidtrans;translation\n")
+	writer = csv.writer(file1, delimiter=';', quoting=csv.QUOTE_ALL)
+	writer.writerow([unidform, form, card, unidtrans, translation])
+
+print("---------------------------------------")
+print("Exporting " + exportcsv)
