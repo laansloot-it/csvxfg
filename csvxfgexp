@@ -6,6 +6,8 @@
 # 17 March 2020
 
 import csv, uuid, sys
+from lxml import etree
+from lxml.etree import fromstring
 
 
 #
@@ -50,6 +52,12 @@ def getform(formunid):
 		for row in csv_forms:
 			if row["unid"] == formunid:
 				return (row["form"], row["card"])
+				
+def createxml(xmlin, filename):
+	with open(filename, 'w') as file2:
+		parser = etree.XMLParser(encoding='utf-8', remove_blank_text=True)
+		xmlout = fromstring(xmlin, parser=parser)
+		print(etree.tostring(xmlout, pretty_print=True, xml_declaration=True, encoding='utf-8', standalone=True).decode(), file=file2)
 
 
 #
@@ -62,19 +70,17 @@ if uniqueform:
 	print("---------------------------------------")
 
 	translationfilename = uniqueform[0] + "-translation.txt"
-	with open(translationfilename, 'w') as file0:
-		print(uniqueform[3], file=file0)
+	with open(translationfilename, 'w') as file1:
+		print(uniqueform[3], file=file1)
 		print("Exporting " + translationfilename)
 
 	xmlformfilename = uniqueform[0] + "-form.xml"
-	with open(xmlformfilename, 'w') as file1:
-		print(getform(uniqueform[2])[0], file=file1)
-		print("Exporting " + xmlformfilename)
+	createxml(getform(uniqueform[2])[0].encode('utf-8'), xmlformfilename)
+	print("Exporting " + xmlformfilename)
 
 	xmlcardfilename = uniqueform[0] + "-card.xml"
-	with open(xmlcardfilename, 'w') as file2:
-		print(getform(uniqueform[2])[1], file=file2)
-		print("Exporting " + xmlcardfilename)
+	createxml(getform(uniqueform[2])[1].encode('utf-8'), xmlcardfilename)
+	print("Exporting " + xmlcardfilename)
 
 	unidfilename = uniqueform[0] + "-unids.txt"
 	with open(unidfilename, 'w') as file3:

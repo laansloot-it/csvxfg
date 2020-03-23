@@ -16,8 +16,8 @@ prefixunid = sys.argv[1]
 
 unidfilename = prefixunid + "-unids.txt"
 unids = []
-with open(unidfilename, "r") as file0:
-	for line in file0.readlines():
+with open(unidfilename, "r") as file1:
+	for line in file1.readlines():
 		keys = line.strip().split(":")
 		unids.append(keys[1])
 unidtrans = unids[0]
@@ -28,24 +28,24 @@ print("Found form \"" + title + "\"")
 print("---------------------------------------")
 
 translationfilename = prefixunid + "-translation.txt"
-with open(translationfilename, "r") as file1:
+with open(translationfilename, "r") as file2:
 	print("Importing " + translationfilename)
-	translation = file1.read().strip()
+	translation = file2.read().strip()
 
 xmlformfilename = prefixunid + "-form.xml"
-with open(xmlformfilename, "r") as file2:
+with open(xmlformfilename, "r") as file3:
+	form = "".join(line.strip() for line in file3)
 	print("Importing " + xmlformfilename)
-	form = file2.read().strip()
-	
+
 xmlcardfilename = prefixunid + "-card.xml"
-with open(xmlcardfilename, "r") as file3:
+with open(xmlcardfilename, "r") as file4:
+	card = "".join(line.strip() for line in file4)
 	print("Importing " + xmlcardfilename)
-	card = file3.read().strip()
 
 exportcsv = "XFG-import.csv"
-with open(exportcsv, 'w', newline='') as file1:
+with open(exportcsv, 'w', newline='') as file5:
 	file1.write("unidform;form;card;unidtrans;translation\n")
-	writer = csv.writer(file1, delimiter=';', quoting=csv.QUOTE_ALL)
+	writer = csv.writer(file5, delimiter=';', quoting=csv.QUOTE_ALL)
 	writer.writerow([unidform, form, card, unidtrans, translation])
 
 print("---------------------------------------")
